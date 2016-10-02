@@ -5,6 +5,7 @@ import {
   StyleSheet,
   //Text,
   View,
+  Dimensions
 } from 'react-native';
 import Svg,{
     Circle,
@@ -24,15 +25,16 @@ import Svg,{
     Stop
 } from 'react-native-svg';
 
-dataset = [5, 6.7, 14, 4.3, 8, 11, 5, 3, 2.6, 8, 1, 3];
+var dataset = [5, 6.7, 4.3, 8, 11, 5, 3, 2.6, 8];
+var width = Dimensions.get('window');
 
 class testGraph extends Component {
   render() {
     return (
       <View>
-      <Svg style={styles.svg} height={320} width={300}>
-        {this._svgGraph()}
-      </Svg>
+        <Svg style={styles.svg}>
+          {this._svgGraph()}
+        </Svg>
       </View>
     );
   }
@@ -42,12 +44,14 @@ class testGraph extends Component {
     let text = []; //tick points on axis
     let tickLines = []; //tick lines
 
+    console.log(width.width);
+
     //Measurments for placement of axis
     const lowNumberForXAxis = 32;
     const lowNumberForYAxis = 0;
     const highNumberForYAxis = 299;
-    const highNumberForXAxis = 299;//This will need to be based on the screen width of device
-    const barPadding = 2;
+    const highNumberForXAxis = width.width-20;//This will need to be based on the screen width of device
+    const barPadding = 1;
 
     //Get max number from data set
     let max = function(){
@@ -60,7 +64,7 @@ class testGraph extends Component {
       return currentMax;
     }();
 
-    getTicks(4);
+    getTicks(3);
     getBars();
 
     function getHeight(axisHeight, datasetMax, newNumber){
@@ -86,7 +90,7 @@ class testGraph extends Component {
     function getBars(){
       for(var i = 0; i < dataset.length; i++){
         let height = getHeight(highNumberForYAxis, max, dataset[i]);
-        let width = (highNumberForXAxis - lowNumberForXAxis) / dataset.length - barPadding;
+        let width = (highNumberForXAxis - lowNumberForXAxis) / dataset.length - 4;
         let x = (lowNumberForXAxis + barPadding) + rectangles.length * (highNumberForXAxis - lowNumberForXAxis) / dataset.length;//rectangles.length * highNumberForXAxis / dataset.length
         let y = highNumberForYAxis - height;
         rectangles.push(<Rect key={rectangles.length} x={x} y={y} width={width} height={height} fill={'rgb(23,153,173)'} />)
@@ -109,15 +113,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    alignItems: 'center'
   },
   svg: {
     marginTop: 150,
-    marginLeft: 20,
+    marginLeft: 10,
+    marginRight: 10,
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: 300
+    //justifyContent: 'center',
+    //alignItems: 'center',
   }
 });
 
