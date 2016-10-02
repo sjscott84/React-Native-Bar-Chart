@@ -24,11 +24,13 @@ import Svg,{
     Stop
 } from 'react-native-svg';
 
+dataset = [5, 6.7, 14, 4.3, 8, 11, 5, 3, 2.6, 8, 1, 3];
+
 class testGraph extends Component {
   render() {
     return (
       <View>
-      <Svg style={styles.svg} height={h} width={w}>
+      <Svg style={styles.svg} height={320} width={300}>
         {this._svgGraph()}
       </Svg>
       </View>
@@ -58,7 +60,7 @@ class testGraph extends Component {
       return currentMax;
     }();
 
-    getTicks(6);
+    getTicks(4);
     getBars();
 
     function getHeight(axisHeight, datasetMax, newNumber){
@@ -68,12 +70,15 @@ class testGraph extends Component {
 
     function getTicks(numberofTicks){
       let fontSize = 11;
+      let lineHeight = 14;
       text.push(<Text key={0} stroke="black" fontSize={fontSize} x={1} y={highNumberForYAxis-12}>{'0'}</Text>);
+      text.push(<Text key={max} stroke="black" fontSize={fontSize} x={1} y={lowNumberForYAxis}>{max}</Text>);
+      tickLines.push(<Line key={max} x1={lowNumberForXAxis} y1={lowNumberForYAxis+1} x2={highNumberForXAxis} y2={lowNumberForYAxis+1} stroke='gray' strokeWidth={0.75} />);
 
-      for(var i = 1; i <= numberofTicks; i++){
+      for(var i = 1; i < numberofTicks; i++){
         let tickText = Math.round(((max/numberofTicks)*[i])*100)/100;
         let tickY = getHeight(highNumberForYAxis, max, tickText);
-        text.push(<Text key={tickText} stroke="black" fontSize={fontSize} x={1} y={highNumberForYAxis-tickY}>{tickText}</Text>);
+        text.push(<Text key={tickText} stroke="black" lineHeight={lineHeight} fontSize={fontSize} x={1} y={highNumberForYAxis-tickY-(lineHeight/2)}>{tickText}</Text>);
         tickLines.push(<Line key={tickText} x1={lowNumberForXAxis} y1={highNumberForYAxis-tickY} x2={highNumberForXAxis} y2={highNumberForYAxis-tickY} stroke='gray' strokeWidth={0.75} />);
       }
     };
